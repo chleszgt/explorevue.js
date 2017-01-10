@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TEST VUE</title>
+</head>
+<style type="text/css">
+	[v-cloak] {
+	  display: none;
+	}
+
+
+	#pages{
+		position: relative;
+		margin-top: 200px;
+	}
+	#pageA, #pageB{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+
+
+	.fade-enter-active, .fade-leave-active {
+	  transition: opacity 1s
+	}
+	.fade-enter, .fade-leave-active {
+	  opacity: 0;
+	}
+</style>
+<body>
+
+<section id="main">
+
+	<div v-cloak>
+  		{{ title }}
+	
+
+
+		<router-link to="/">Go to home</router-link>
+		<router-link to="/pageB">Go to B</router-link>
+
+		<div id="pages">
+			<transition name="fade">
+				<router-view></router-view>
+			</transition>
+		</div>
+
+
+		<!--<container>
+			<project>
+				<p>Premier element</p>
+			</project>
+			<project>
+				<p>Deuxième element</p>
+			</project>
+		</container>-->
+
+
+
+
+	</div>
+
+</section>
+
+<script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+<script type="text/javascript" src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript" >
+
+	var pageA = Vue.component('pageA', {
+		data: function(){
+			return {
+				id : 'A'
+			}
+		},
+		template: '<div id="pageA">page a blblaaaa</div>'
+	});
+
+	var pageB = Vue.component('pageB', {
+		data: function(){
+			return {
+				id : 'B'
+			}
+		},
+		beforeCreate: function(){
+			console.log("b is ready to be create");
+		},
+		created: function(){
+			console.log("b is created");
+		},
+		// v-once used beacause it's only static content so it's evaluated once and cached
+		template: '<div v-once id="pageB">Hexagon VHS selvage glossier, photo booth lomo hammock tattooed man bun. Forage normcore master cleanse prism, shabby chic you probably havent heard of them coloring book seitan jianbing hot chicken fap disrupt cornhole. Authentic pitchfork DIY, portland woke kitsch kogi hexagon you probably havent heard of them intelligentsia. Woke keffiyeh tote bag, squid man bun fixie trust fund mixtape. Brunch live-edge neutra, organic YOLO single-origin coffee semiotics synth post-ironic aesthetic art party put a bird on it cronut. IPhone man braid cornhole, cray tumblr bicycle rights food truck jean shorts pitchfork occupy shabby chic meditation. Mustache jianbing etsy, migas banjo tilde roof party man braid gentrify marfa.</div>'
+	});
+
+
+	var router = new VueRouter({
+		//mode: 'history',
+		routes: [{
+			path: '/',
+			component: pageA
+		},{
+			path: '/pageB',
+			component: pageB
+		}]
+	});
+
+
+
+	Vue.component('container', {
+		data: function(){
+			return {
+				index: 0,
+				projects: this.$children
+			}
+		},
+		methods: {
+			prev: function(){
+				this.index--;
+				if(this.index < 0){
+					this.index = this.projectsLength - 1;
+				}
+			},
+			next: function(){
+				this.index++;
+				if(this.index >= this.projectsLength){
+					this.index = 0;
+				}
+			}
+		},
+		computed: {
+			projectsLength: function(){
+				return this.projects.length;
+			}
+		},
+		mounted: function(){
+			this.project = this.$children;
+			this.project.forEach(function(elem, i){
+				elem.index = i;
+			});
+		},
+		template: `<div>
+			<slot></slot>
+			<button @click="prev">prev</button>
+			<button @click="next">next</button>
+			</div>`
+	});
+
+	Vue.component('project', {
+		data: function(){
+			return {
+				index: 0,
+			}
+		},
+		computed: {
+			visible : function(){
+				return this.index === this.$parent.index;
+			}
+		},
+		template: '<div>{{ index }} : {{ visible }}<slot></slot></div>'
+	});
+
+
+	var app = new Vue({
+		el: "#main",
+		router,
+		data: {
+			title : "Mailgun"
+		}
+	})
+</script>
+</body>
+</html>
