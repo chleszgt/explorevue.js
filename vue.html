@@ -33,6 +33,11 @@
 	}
 	#test > img{
 		width: 500px;
+		transition: all 2s ease;
+	}
+	#test > img.full{
+		width: 1000px;
+		transition: all 2s ease;
 	}
 
 
@@ -60,7 +65,7 @@
 			<transition name="fade">
 				<router-view>
 					<div id="test">
-						<img src="thomas.jpg">
+						<img :class="{full: $route.name == 'project'}" src="thomas.jpg">
 					</div>
 				</router-view>
 			</transition>
@@ -117,10 +122,12 @@
 		//mode: 'history',
 		routes: [{
 			path: '/',
-			component: Home
+			component: Home,
+			name: 'home'
 		},{
 			path: '/project',
-			component: Project
+			component: Project,
+			name: 'project'
 		}]
 	});
 
