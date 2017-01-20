@@ -8,15 +8,31 @@
 	  display: none;
 	}
 
-
+	html,body{
+		height: 100%;
+		background-color: #ccc;
+	}
 	#pages{
-		position: relative;
-		margin-top: 200px;
+		position: absolute;
+		top: 200px;
+		left: 0;
+		width: 100%;
+		background-color: #fff;
 	}
 	#pageA, #pageB{
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+
+
+	#test{
+		position: absolute;
+		top: 0;
+		right: 5%;
+	}
+	#test > img{
+		width: 500px;
 	}
 
 
@@ -38,11 +54,15 @@
 
 
 		<router-link to="/">Go to home</router-link>
-		<router-link to="/pageB">Go to B</router-link>
+		<router-link to="/project">Go to B</router-link>
 
 		<div id="pages">
 			<transition name="fade">
-				<router-view></router-view>
+				<router-view>
+					<div id="test">
+						<img src="thomas.jpg">
+					</div>
+				</router-view>
 			</transition>
 		</div>
 
@@ -67,16 +87,16 @@
 <script type="text/javascript" src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 <script type="text/javascript" >
 
-	var pageA = Vue.component('pageA', {
+	var Home = Vue.component('Home', {
 		data: function(){
 			return {
 				id : 'A'
 			}
 		},
-		template: '<div id="pageA">page a blblaaaa</div>'
+		template: '<div id="home"><slot></slot>page a blblaaaa</div>'
 	});
 
-	var pageB = Vue.component('pageB', {
+	var Project = Vue.component('Project', {
 		data: function(){
 			return {
 				id : 'B'
@@ -89,7 +109,7 @@
 			console.log("b is created");
 		},
 		// v-once used beacause it's only static content so it's evaluated once and cached
-		template: '<div v-once id="pageB">Hexagon VHS selvage glossier, photo booth lomo hammock tattooed man bun. Forage normcore master cleanse prism, shabby chic you probably havent heard of them coloring book seitan jianbing hot chicken fap disrupt cornhole. Authentic pitchfork DIY, portland woke kitsch kogi hexagon you probably havent heard of them intelligentsia. Woke keffiyeh tote bag, squid man bun fixie trust fund mixtape. Brunch live-edge neutra, organic YOLO single-origin coffee semiotics synth post-ironic aesthetic art party put a bird on it cronut. IPhone man braid cornhole, cray tumblr bicycle rights food truck jean shorts pitchfork occupy shabby chic meditation. Mustache jianbing etsy, migas banjo tilde roof party man braid gentrify marfa.</div>'
+		template: '<div v-once id="project"><slot></slot>Hexagon VHS selvage glossier, photo booth lomo hammock tattooed man bun. Forage normcore master cleanse prism, shabby chic you probably havent heard of them coloring book seitan jianbing hot chicken fap disrupt cornhole. Authentic pitchfork DIY, portland woke kitsch kogi hexagon you probably havent heard of them intelligentsia. Woke keffiyeh tote bag, squid man bun fixie trust fund mixtape. Brunch live-edge neutra, organic YOLO single-origin coffee semiotics synth post-ironic aesthetic art party put a bird on it cronut. IPhone man braid cornhole, cray tumblr bicycle rights food truck jean shorts pitchfork occupy shabby chic meditation. Mustache jianbing etsy, migas banjo tilde roof party man braid gentrify marfa.</div>'
 	});
 
 
@@ -97,16 +117,24 @@
 		//mode: 'history',
 		routes: [{
 			path: '/',
-			component: pageA
+			component: Home
 		},{
-			path: '/pageB',
-			component: pageB
+			path: '/project',
+			component: Project
 		}]
+	});
+
+	var app = new Vue({
+		el: "#main",
+		router,
+		data: {
+			title : "Mailgun"
+		}
 	});
 
 
 
-	Vue.component('container', {
+	/*Vue.component('container', {
 		data: function(){
 			return {
 				index: 0,
@@ -157,16 +185,9 @@
 			}
 		},
 		template: '<div>{{ index }} : {{ visible }}<slot></slot></div>'
-	});
+	});*/
 
 
-	var app = new Vue({
-		el: "#main",
-		router,
-		data: {
-			title : "Mailgun"
-		}
-	})
 </script>
 </body>
 </html>
